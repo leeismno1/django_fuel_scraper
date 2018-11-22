@@ -4,16 +4,19 @@ from pprint import pprint
 
 
 # Region Codes
+regions = {
+    "NORTH_OF_RIVER": 25,
+    "SOUTH_OF_RIVER": 26,
+    "EAST_HILLS": 27,
+}
 
-NORTH_OF_RIVER = 25
-SOUTH_OF_RIVER = 26 
-EAST_HILLS = 27
-ALBANY = 15 
-AUGUSTA_MARGARET_RIVER = 28  
-BRIDGETOWN_GREENBUSHES = 30 
-BOULDER = 1  
-BROOME = 2 
-BUNBURY = 16 
+
+"""ALBANY": 15,
+AUGUSTA_MARGARET_RIVER": 28,
+BRIDGETOWN_GREENBUSHES": 30,
+BOULDER": 1,
+BROOME": 2
+BUNBURY": 16, 
 BUSSELTON_TOWNSITE = 3 
 BUSSELTON_SHIRE = 29 
 CAPEL = 19 
@@ -62,13 +65,15 @@ WAROONA = 24
 WILLIAMS = 54 
 WUBIN = 55 
 WUNDOWIE = 59 
-YORK = 56 
+YORK = 56"""
 
 # Days
 
 TODAY = 'today'
 TOMORROW = 'tomorrow'
 YESTERDAY = 'yesterday'
+
+day  = [TODAY, TOMORROW, YESTERDAY]
 
 
 
@@ -82,6 +87,7 @@ RON_98 = 6
 E85 = 10 
 BRAND_DIESEL = 11
 
+fuel_types = [UNLEADED_PETROL, PREMIUM_UNLEADED, DIESEL, LPG, RON_98, E85, BRAND_DIESEL]
 
 
 def fuel_day(which_fuel, which_region, which_day):
@@ -115,10 +121,27 @@ def by_price(item):
     return item['Price']
 
 def  fuel_table_data():
+    all_fuel = []
 
-    fuel_today = fuel_day(UNLEADED_PETROL, NORTH_OF_RIVER, TODAY)
-    fuel_tomorrow = fuel_day(UNLEADED_PETROL, NORTH_OF_RIVER, TOMORROW)
-    all_fuel = fuel_today+fuel_tomorrow
+    for fuel in fuel_types:
+        # all fuel to be in a loop similar to all_fuel that is commented out below
+
+        # all_fuel +=  fuel_day(fuel, NORTH_OF_RIVER)
+
+        for days in day: #for loop for day
+
+            for region in regions:
+
+                all_fuel += fuel_day(fuel, regions[region], days)
+
+
+
+
+    #fuel_today_unleaded = fuel_day(UNLEADED_PETROL, NORTH_OF_RIVER, TODAY)
+    #fuel_tomorrow_unleaded = fuel_day(UNLEADED_PETROL, NORTH_OF_RIVER, TOMORROW)
+    #fuel_today_premium = fuel_day(PREMIUM_UNLEADED, NORTH_OF_RIVER, TODAY)
+    #fuel_tomorrow_premium = fuel_day(PREMIUM_UNLEADED, NORTH_OF_RIVER, TOMORROW)
+    # all_fuel = fuel_today_unleaded+fuel_tomorrow_unleaded+fuel_today_premium+fuel_tomorrow_premium
     sorted_fuel_output = sorted(all_fuel, key=by_price)
     return sorted_fuel_output
 
@@ -127,7 +150,7 @@ def  fuel_table_data():
 # print(1, fuel_today, TODAY)
 # print(fuel_tomorrow)
 
-fuel_output = fuel_table_data()
+all_fuel_output = fuel_table_data()
 
 
 
@@ -145,10 +168,10 @@ def create_fuel_table():
 
     fuel_data_row_string = ""
 
-    for value in fuel_output:
+    for value in all_fuel_output:
         fuel_data_row_string += """
             <tr>
-                <td>{Price} </td><td>{Brand} </td><td>{Address} </td><td>{Location} </td><td>{Day}</td>
+                <td>{Price} </td><td>{Brand} </td><td>{Address} </td><td>{Location} </td><td>{Day}</td><td>{Fuel}</td>
             </tr>
         """.format(**value)
     fuel_html = "<html><title>Fuel Report</title><body><tbody><table>" + fuel_data_row_string + "</table></tbody></body></html>"
