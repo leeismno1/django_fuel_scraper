@@ -90,6 +90,8 @@ BRAND_DIESEL = 11
 fuel_types = [UNLEADED_PETROL, PREMIUM_UNLEADED, DIESEL, LPG, RON_98, E85, BRAND_DIESEL]
 
 
+
+
 def fuel_day(which_fuel, which_region, which_day):
 
     if which_day == 'today':
@@ -110,9 +112,32 @@ def fuel_day(which_fuel, which_region, which_day):
         new_dict["Brand"] = entry["brand"]
         new_dict["Address"] = entry["address"]
         new_dict["Location"] = entry["location"]
+        new_dict["Longitude"] = entry["longitude"]
+        new_dict["Latitude"] = entry["latitude"]
         new_dict["Day"] = which_day
         new_dict["Fuel"] = which_fuel
+
+        fuel_name = ''
+        if which_fuel == 1:
+            fuel_name  = "Unleaded Petrol"
+        elif which_fuel == 2:
+            fuel_name = "Premium Unleaded Petrol"
+        elif which_fuel == 4:
+            fuel_name = "Diesel Petrol"
+        elif which_fuel == 5:
+            fuel_name = "LPG"
+        elif which_fuel == 6:
+            fuel_name = "Premium Unleaded 98 Petrol"
+        elif which_fuel == 10:
+            fuel_name = "E85 Petrol"
+        elif which_fuel == 11:
+            fuel_name = "Brand Diesel"
+
+        new_dict["Fuel_name"] = fuel_name
+
         fuel_output.append(new_dict)
+
+
     return fuel_output
     # fuel_output.append(entry["price"])
 
@@ -150,7 +175,7 @@ def  fuel_table_data():
 # print(1, fuel_today, TODAY)
 # print(fuel_tomorrow)
 
-all_fuel_output = fuel_table_data()
+# all_fuel_output = fuel_table_data()
 
 
 
@@ -168,10 +193,10 @@ def create_fuel_table():
 
     fuel_data_row_string = ""
 
-    for value in all_fuel_output:
+    for value in fuel_table_data():
         fuel_data_row_string += """
             <tr>
-                <td>{Price} </td><td>{Brand} </td><td>{Address} </td><td>{Location} </td><td>{Day}</td><td>{Fuel}</td>
+                <td>{Price} </td><td>{Brand}</td><td>{Address}</td><td>{Location}</td><td>{Latitude}</td><td>{Longitude}</td><td>{Day}</td><td>{Fuel_name}</td>
             </tr>
         """.format(**value)
     fuel_html = "<html><title>Fuel Report</title><body><tbody><table>" + fuel_data_row_string + "</table></tbody></body></html>"
@@ -205,3 +230,6 @@ def create_fuel_table():
 # Read up on list comprehension
 
 # Read up on Python Context Manager
+
+
+"""IDEA - either use current location to get field prices or enter an address to get fuel prices for"""
